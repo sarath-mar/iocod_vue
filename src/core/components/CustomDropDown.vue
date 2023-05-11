@@ -102,7 +102,11 @@
             />
           </div>
           <div class="submit-btn-div">
-            <custom-button :text="'Submit'" :class="'submit-button '" />
+            <custom-button
+              :text="'Submit'"
+              :class="'submit-button '"
+              @click="submit()"
+            />
           </div>
         </div>
       </div>
@@ -123,86 +127,6 @@ export default {
       // selectedList: [],
       showDropDownList: false,
       updatedDataList: [],
-      // dataList: [
-      //   {
-      //     class: "Science",
-      //     teachers: [
-      //       {
-      //         name: "Teacher One",
-      //         studentsList: [
-      //           { name: "Student one 1", isChecked: true },
-      //           { name: "Student one 2", isChecked: false },
-      //         ],
-      //       },
-      //       {
-      //         name: "Teacher Two",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //       {
-      //         name: "Teacher Three",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     class: "Commerce",
-      //     teachers: [
-      //       {
-      //         name: "Teacher One",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //       {
-      //         name: "Scolack",
-      //         studentsList: [
-      //           { name: "Student two 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //       {
-      //         name: "Teacher Three",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     class: "Humainty",
-      //     teachers: [
-      //       {
-      //         name: "Teacher One",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //       {
-      //         name: "Teacher Two",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //       {
-      //         name: "Teacher Three",
-      //         studentsList: [
-      //           { name: "Student one 1" },
-      //           { name: "Student one 2" },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      // ],
       dataList: [],
     };
   },
@@ -225,6 +149,11 @@ export default {
     },
   },
   methods: {
+    submit() {
+      this.showDropDownList = false;
+
+      this.$emit("submitEvent", this.dataList);
+    },
     isWordMatches(word, input) {
       if (word && input) {
         var pattern = new RegExp("(\\w*" + input + "\\w*)", "gi");
