@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    {{  }}
+    {{ updatedDataList }}
     <div class="select-box">
       <div class="selected" @click="showDropDownList = !showDropDownList">
         <div class="drop-down-title">
@@ -25,7 +25,6 @@
               id=""
               placeholder="Search.."
               v-model="searchVal"
-              @change="updatedDataList"
             />
             <span class="material-icons expand-more-icon"> search</span>
           </div>
@@ -123,6 +122,7 @@ export default {
       selectedSubList: [],
       // selectedList: [],
       showDropDownList: false,
+      updatedDataList: [],
       dataList: [
         {
           class: "Science",
@@ -161,9 +161,9 @@ export default {
               ],
             },
             {
-              name: "Teacher Two",
+              name: "Scolack",
               stundestsList: [
-                { name: "Student one 1" },
+                { name: "Student two 1" },
                 { name: "Student one 2" },
               ],
             },
@@ -205,6 +205,14 @@ export default {
       ],
     };
   },
+  watch: {
+    searchVal: {
+      handler() {
+        this.searchData();
+      },
+      immediate: true,
+    },
+  },
   methods: {
     isWordMatches(word, input) {
       if (word && input) {
@@ -215,25 +223,50 @@ export default {
         return false;
       }
     },
-    updatedDataList() {
+    searchData() {
       let newArray = [];
-
+      console.log("hye");
       if (this.searchVal !== "") {
         let value = this.searchVal;
-        // this.dataList.forEach((data) => {
-        //   data.class && isWordMatches(data.class, value);
-        //   // data.teachers && data.te
-        // });
         for (const list of this.dataList) {
           if (!list.class) {
             continue;
           }
           if (this.isWordMatches(list.class, value)) {
             newArray.push(list);
+          } else {
+            let newPrimaryObject = new Object();
+            newPrimaryObject.class = list.class;
+            newPrimaryObject.teachers = [];
+            for (const teacher of list.teachers) {
+              if (!teacher.name) {
+                continue;
+              }
+              if (this.isWordMatches(teacher.name, value)) {
+                newPrimaryObject.teachers.push(teacher);
+                newArray.push(newPrimaryObject);
+              } else {
+                // newPrimaryObject.teachers
+                // let secondaryObject = { name: teacher.name, stundestsList: [] };
+                // for (const student of teacher.stundestsList) {
+                //   if (!student.name) {
+                //     continue;
+                //   }
+                //   if (this.isWordMatches(student.name, value)) {
+                //     secondaryObject.stundestsList.push(student);
+                //     newPrimaryObject.teachers.push(secondaryObject);
+                //     newArray.push(newPrimaryObject);
+                //   }
+                // }
+                // newPrimaryObject.teachers
+              }
+            }
           }
         }
+        this.updatedDataList = [...newArray];
+      } else {
+        this.updatedDataList = [...this.dataList];
       }
-      return this.dataList;
     },
     clickMainHeader(index) {
       let existingIndex = this.selectedMainList.indexOf(index);
@@ -336,9 +369,7 @@ export default {
       );
     },
   },
-  computed: {
-  
-  },
+  computed: {},
 };
 </script>
 
