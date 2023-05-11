@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    {{ updatedDataList.length }}
-    <hr />
-    {{ updatedDataList }}
     <div class="select-box">
       <div class="selected" @click="showDropDownList = !showDropDownList">
         <div class="drop-down-title">
@@ -31,7 +28,8 @@
             <span class="material-icons expand-more-icon"> search</span>
           </div>
 
-          <div v-for="(school, indexMain) in dataList" :key="indexMain">
+          <div v-for="(school, indexMain) in updatedDataList" :key="indexMain">
+            <!-- <div v-for="(school, indexMain) in dataList" :key="indexMain"> -->
             <div class="option-main">
               <span
                 class="material-icons expand-more-icon"
@@ -125,87 +123,98 @@ export default {
       // selectedList: [],
       showDropDownList: false,
       updatedDataList: [],
-      dataList: [
-        {
-          class: "Science",
-          teachers: [
-            {
-              name: "Teacher One",
-              studentsList: [
-                { name: "Student one 1", isChecked: true },
-                { name: "Student one 2", isChecked: false },
-              ],
-            },
-            {
-              name: "Teacher Two",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-            {
-              name: "Teacher Three",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-          ],
-        },
-        {
-          class: "Commerce",
-          teachers: [
-            {
-              name: "Teacher One",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-            {
-              name: "Scolack",
-              studentsList: [
-                { name: "Student two 1" },
-                { name: "Student one 2" },
-              ],
-            },
-            {
-              name: "Teacher Three",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-          ],
-        },
-        {
-          class: "Humainty",
-          teachers: [
-            {
-              name: "Teacher One",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-            {
-              name: "Teacher Two",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-            {
-              name: "Teacher Three",
-              studentsList: [
-                { name: "Student one 1" },
-                { name: "Student one 2" },
-              ],
-            },
-          ],
-        },
-      ],
+      // dataList: [
+      //   {
+      //     class: "Science",
+      //     teachers: [
+      //       {
+      //         name: "Teacher One",
+      //         studentsList: [
+      //           { name: "Student one 1", isChecked: true },
+      //           { name: "Student one 2", isChecked: false },
+      //         ],
+      //       },
+      //       {
+      //         name: "Teacher Two",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //       {
+      //         name: "Teacher Three",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     class: "Commerce",
+      //     teachers: [
+      //       {
+      //         name: "Teacher One",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //       {
+      //         name: "Scolack",
+      //         studentsList: [
+      //           { name: "Student two 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //       {
+      //         name: "Teacher Three",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     class: "Humainty",
+      //     teachers: [
+      //       {
+      //         name: "Teacher One",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //       {
+      //         name: "Teacher Two",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //       {
+      //         name: "Teacher Three",
+      //         studentsList: [
+      //           { name: "Student one 1" },
+      //           { name: "Student one 2" },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // ],
+      dataList: [],
     };
+  },
+  props: {
+    studentList: {
+      required: true,
+      type: Array,
+    },
+  },
+  created() {
+    this.dataList = this.studentList;
+    this.searchData();
   },
   watch: {
     searchVal: {
@@ -228,7 +237,7 @@ export default {
     searchData() {
       let newArray = [];
 
-      if (this.searchVal === "") {
+      if (!this.searchVal) {
         this.updatedDataList = [...this.dataList];
         return;
       }
@@ -328,19 +337,25 @@ export default {
     },
     onCheckSubCategory(event, indexMain, index) {
       let checked = event.target.checked;
-      this.dataList[indexMain] &&
-        this.dataList[indexMain].teachers &&
-        this.dataList[indexMain].teachers[index] &&
-        this.dataList[indexMain].teachers[index].studentsList &&
-        this.dataList[indexMain].teachers[index].studentsList.length &&
-        this.dataList[indexMain].teachers[index].studentsList.forEach(
+      this.updatedDataList[indexMain] &&
+        // this.dataList[indexMain] &&
+        this.updatedDataList[indexMain].teachers &&
+        this.updatedDataList[indexMain].teachers[index] &&
+        this.updatedDataList[indexMain].teachers[index].studentsList &&
+        this.updatedDataList[indexMain].teachers[index].studentsList.length &&
+        this.updatedDataList[indexMain].teachers[index].studentsList.forEach(
           (student) => {
             student.isChecked = checked;
           }
         );
+      this.dataList[indexMain].teachers[index].studentsList.forEach(
+        (student) => {
+          student.isChecked = checked;
+        }
+      );
     },
     isSelectAll(check) {
-      this.dataList.forEach((data) => {
+      this.updatedDataList.forEach((data) => {
         data.teachers &&
           data.teachers.forEach(
             (teacher) =>
@@ -353,21 +368,26 @@ export default {
     },
     onCheckMainCategory(event, indexMain) {
       let checked = event.target.checked;
-      this.dataList[indexMain].teachers &&
-        this.dataList[indexMain].teachers.length &&
-        this.dataList[indexMain].teachers.forEach((teacher) => {
+      this.updatedDataList[indexMain].teachers &&
+        this.updatedDataList[indexMain].teachers.length &&
+        this.updatedDataList[indexMain].teachers.forEach((teacher) => {
           teacher.studentsList.forEach((student) => {
             student.isChecked = checked;
           });
         });
+      this.dataList[indexMain].teachers.forEach((teacher) => {
+        teacher.studentsList.forEach((student) => {
+          student.isChecked = checked;
+        });
+      });
     },
     isSubCategoryChecked(indexMain, index) {
       return (
-        this.dataList[indexMain].teachers &&
-        this.dataList[indexMain].teachers[index] &&
-        this.dataList[indexMain].teachers[index].studentsList &&
-        this.dataList[indexMain].teachers[index].studentsList.length &&
-        this.dataList[indexMain].teachers[index].studentsList.every(
+        this.updatedDataList[indexMain].teachers &&
+        this.updatedDataList[indexMain].teachers[index] &&
+        this.updatedDataList[indexMain].teachers[index].studentsList &&
+        this.updatedDataList[indexMain].teachers[index].studentsList.length &&
+        this.updatedDataList[indexMain].teachers[index].studentsList.every(
           (x) => x.isChecked == true
         )
       );
@@ -375,8 +395,8 @@ export default {
     },
     isMainCategoryChecked(indexMain) {
       return (
-        this.dataList[indexMain].teachers &&
-        this.dataList[indexMain].teachers.every((teacher, index) =>
+        this.updatedDataList[indexMain].teachers &&
+        this.updatedDataList[indexMain].teachers.every((teacher, index) =>
           this.isSubCategoryChecked(indexMain, index)
         )
       );

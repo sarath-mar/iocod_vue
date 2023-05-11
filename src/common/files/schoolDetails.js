@@ -3,24 +3,24 @@ let schoolDetails = [
         class: "Science",
         teachers: [
             {
-                name: "Teacher One",
+                name: "Jhon",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Tom Hanks" },
+                    { name: "Jim  " },
                 ],
             },
             {
-                name: "Teacher Two",
+                name: "Daniel",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Vanhue" },
+                    { name: "Antony" },
                 ],
             },
             {
-                name: "Teacher Three",
+                name: "Ian",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Jhon" },
+                    { name: "Antony" },
                 ],
             },
         ],
@@ -29,21 +29,21 @@ let schoolDetails = [
         class: "Commerce",
         teachers: [
             {
-                name: "Teacher One",
+                name: "Ralf",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Gary" },
+                    { name: "Old man" },
                 ],
             },
             {
                 name: "Scolack",
                 studentsList: [
-                    { name: "Student two 1" },
-                    { name: "Student one 2" },
+                    { name: "Hurt" },
+                    { name: "Jhon" },
                 ],
             },
             {
-                name: "Teacher Three",
+                name: "Christian",
                 studentsList: [
                     { name: "Student one 1" },
                     { name: "Student one 2" },
@@ -55,24 +55,23 @@ let schoolDetails = [
         class: "Humainty",
         teachers: [
             {
-                name: "Teacher One",
+                name: "Emma",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Richard" },
+                    { name: "Colin" },
                 ],
             },
             {
-                name: "Teacher Two",
+                name: "Watson",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Jhon" },
+                    { name: "Siemon" },
                 ],
             },
             {
-                name: "Teacher Three",
+                name: "Tom",
                 studentsList: [
-                    { name: "Student one 1" },
-                    { name: "Student one 2" },
+                    { name: "Ward" },
                 ],
             },
         ],
