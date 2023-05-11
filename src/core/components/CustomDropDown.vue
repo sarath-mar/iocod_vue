@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    {{ updatedDataList.length }}
+    <hr />
     {{ updatedDataList }}
     <div class="select-box">
       <div class="selected" @click="showDropDownList = !showDropDownList">
@@ -73,7 +75,7 @@
                   <label>{{ teacher.name }}</label>
                 </div>
                 <div
-                  v-for="(student, i) in teacher.stundestsList"
+                  v-for="(student, i) in teacher.studentsList"
                   :key="i"
                   class="ml-10"
                   v-show="showSubCategory(indexMain, index)"
@@ -129,21 +131,21 @@ export default {
           teachers: [
             {
               name: "Teacher One",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1", isChecked: true },
                 { name: "Student one 2", isChecked: false },
               ],
             },
             {
               name: "Teacher Two",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
             },
             {
               name: "Teacher Three",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
@@ -155,21 +157,21 @@ export default {
           teachers: [
             {
               name: "Teacher One",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
             },
             {
               name: "Scolack",
-              stundestsList: [
+              studentsList: [
                 { name: "Student two 1" },
                 { name: "Student one 2" },
               ],
             },
             {
               name: "Teacher Three",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
@@ -181,21 +183,21 @@ export default {
           teachers: [
             {
               name: "Teacher One",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
             },
             {
               name: "Teacher Two",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
             },
             {
               name: "Teacher Three",
-              stundestsList: [
+              studentsList: [
                 { name: "Student one 1" },
                 { name: "Student one 2" },
               ],
@@ -225,48 +227,59 @@ export default {
     },
     searchData() {
       let newArray = [];
-      console.log("hye");
-      if (this.searchVal !== "") {
-        let value = this.searchVal;
-        for (const list of this.dataList) {
-          if (!list.class) {
+
+      if (this.searchVal === "") {
+        this.updatedDataList = [...this.dataList];
+        return;
+      }
+      let value = this.searchVal;
+      for (const list of this.dataList) {
+        if (!list.class) {
+          continue;
+        }
+        let addedToArray = false;
+        if (this.isWordMatches(list.class, value)) {
+          newArray.push(list);
+          addedToArray = true;
+          continue;
+        }
+        let newPrimaryObject = new Object();
+        let newSecondaryObject = new Object();
+        newPrimaryObject.class = list.class;
+        newPrimaryObject.teachers = [];
+        newSecondaryObject.class = list.class;
+        newSecondaryObject.teachers = [];
+        for (const teacher of list.teachers) {
+          if (!teacher.name) {
             continue;
           }
-          if (this.isWordMatches(list.class, value)) {
-            newArray.push(list);
-          } else {
-            let newPrimaryObject = new Object();
-            newPrimaryObject.class = list.class;
-            newPrimaryObject.teachers = [];
-            for (const teacher of list.teachers) {
-              if (!teacher.name) {
-                continue;
-              }
-              if (this.isWordMatches(teacher.name, value)) {
-                newPrimaryObject.teachers.push(teacher);
-                newArray.push(newPrimaryObject);
-              } else {
-                // newPrimaryObject.teachers
-                // let secondaryObject = { name: teacher.name, stundestsList: [] };
-                // for (const student of teacher.stundestsList) {
-                //   if (!student.name) {
-                //     continue;
-                //   }
-                //   if (this.isWordMatches(student.name, value)) {
-                //     secondaryObject.stundestsList.push(student);
-                //     newPrimaryObject.teachers.push(secondaryObject);
-                //     newArray.push(newPrimaryObject);
-                //   }
-                // }
-                // newPrimaryObject.teachers
-              }
+          if (this.isWordMatches(teacher.name, value) && !addedToArray) {
+            newPrimaryObject.teachers.push(teacher);
+            newArray.push(newPrimaryObject);
+            addedToArray = true;
+            continue;
+          }
+          console.log(teacher.name);
+          let secondaryObject = { name: teacher.name, studentsList: [] };
+          for (const student of teacher.studentsList) {
+            if (!student.name) {
+              continue;
+            }
+            if (this.isWordMatches(student.name, value)) {
+              secondaryObject.studentsList.push(student);
+              continue;
+              // isAnyStudent = true;
             }
           }
+          if (secondaryObject.studentsList.length && !addedToArray) {
+            newSecondaryObject.teachers.push(secondaryObject);
+            newArray.push(newSecondaryObject);
+            addedToArray = true;
+            continue;
+          }
         }
-        this.updatedDataList = [...newArray];
-      } else {
-        this.updatedDataList = [...this.dataList];
       }
+      this.updatedDataList = [...newArray];
     },
     clickMainHeader(index) {
       let existingIndex = this.selectedMainList.indexOf(index);
@@ -318,9 +331,9 @@ export default {
       this.dataList[indexMain] &&
         this.dataList[indexMain].teachers &&
         this.dataList[indexMain].teachers[index] &&
-        this.dataList[indexMain].teachers[index].stundestsList &&
-        this.dataList[indexMain].teachers[index].stundestsList.length &&
-        this.dataList[indexMain].teachers[index].stundestsList.forEach(
+        this.dataList[indexMain].teachers[index].studentsList &&
+        this.dataList[indexMain].teachers[index].studentsList.length &&
+        this.dataList[indexMain].teachers[index].studentsList.forEach(
           (student) => {
             student.isChecked = checked;
           }
@@ -331,8 +344,8 @@ export default {
         data.teachers &&
           data.teachers.forEach(
             (teacher) =>
-              teacher.stundestsList &&
-              teacher.stundestsList.forEach((x) => {
+              teacher.studentsList &&
+              teacher.studentsList.forEach((x) => {
                 x.isChecked = check;
               })
           );
@@ -343,7 +356,7 @@ export default {
       this.dataList[indexMain].teachers &&
         this.dataList[indexMain].teachers.length &&
         this.dataList[indexMain].teachers.forEach((teacher) => {
-          teacher.stundestsList.forEach((student) => {
+          teacher.studentsList.forEach((student) => {
             student.isChecked = checked;
           });
         });
@@ -352,9 +365,9 @@ export default {
       return (
         this.dataList[indexMain].teachers &&
         this.dataList[indexMain].teachers[index] &&
-        this.dataList[indexMain].teachers[index].stundestsList &&
-        this.dataList[indexMain].teachers[index].stundestsList.length &&
-        this.dataList[indexMain].teachers[index].stundestsList.every(
+        this.dataList[indexMain].teachers[index].studentsList &&
+        this.dataList[indexMain].teachers[index].studentsList.length &&
+        this.dataList[indexMain].teachers[index].studentsList.every(
           (x) => x.isChecked == true
         )
       );
