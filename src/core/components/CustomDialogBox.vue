@@ -4,7 +4,7 @@
       <span
         class="material-icons expand-more-icon"
         :class="showDropDownList && 'showDropDownList'"
-        @click="close()" 
+        @click="close()"
       >
         close
       </span>
@@ -17,8 +17,8 @@
 export default {
   methods: {
     close() {
-        console.log("hey")
-      this.$emit("close"); 
+      console.log("hey");
+      this.$emit("close");
     },
   },
 };
@@ -34,9 +34,17 @@ export default {
   left: 50%;
   border-radius: 8px;
   transform: translate(-50%, -50%);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.close {
+  position: sticky;
+  right: 0;
+  float: right;
+  top: 0px;
 }
 .expand-more-icon {
-  float: right;
+  top: 0px;
   background-color: white;
   padding: 10px;
   margin: 10px;

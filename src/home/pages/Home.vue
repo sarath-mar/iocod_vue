@@ -12,7 +12,7 @@
       />
     </div>
     <custom-dialog-box v-if="dialogOpen" @close="close">
-      <ul>
+      <ul class="ul-dialog">
         <span v-for="(item, index) in dropDownList" :key="index">
           <span v-for="(teacher, ind) in item.teachers" :key="ind">
             <span v-for="(student, inde) in teacher.studentsList" :key="inde">
@@ -55,4 +55,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.ul-dialog{
+  /* display: flex; */
+  /* overflow: hidden; */
+}
+</style>
