@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    {{  }}
     <div class="select-box">
       <div class="selected" @click="showDropDownList = !showDropDownList">
         <div class="drop-down-title">
@@ -17,6 +18,18 @@
       </div>
       <div v-show="showDropDownList">
         <div class="active">
+          <div class="input-div">
+            <input
+              type="text"
+              name=""
+              id=""
+              placeholder="Search.."
+              v-model="searchVal"
+              @change="updatedDataList"
+            />
+            <span class="material-icons expand-more-icon"> search</span>
+          </div>
+
           <div v-for="(school, indexMain) in dataList" :key="indexMain">
             <div class="option-main">
               <span
@@ -104,6 +117,7 @@ export default {
   components: { CustomButton },
   data() {
     return {
+      searchVal: "",
       toggleDropDown: false,
       selectedMainList: [],
       selectedSubList: [],
@@ -111,7 +125,7 @@ export default {
       showDropDownList: false,
       dataList: [
         {
-          class: "Class One",
+          class: "Science",
           teachers: [
             {
               name: "Teacher One",
@@ -137,7 +151,7 @@ export default {
           ],
         },
         {
-          class: "Class Two",
+          class: "Commerce",
           teachers: [
             {
               name: "Teacher One",
@@ -163,7 +177,7 @@ export default {
           ],
         },
         {
-          class: "Class Three",
+          class: "Humainty",
           teachers: [
             {
               name: "Teacher One",
@@ -192,6 +206,35 @@ export default {
     };
   },
   methods: {
+    isWordMatches(word, input) {
+      if (word && input) {
+        var pattern = new RegExp("(\\w*" + input + "\\w*)", "gi");
+        var matches = word.match(pattern);
+        return matches;
+      } else {
+        return false;
+      }
+    },
+    updatedDataList() {
+      let newArray = [];
+
+      if (this.searchVal !== "") {
+        let value = this.searchVal;
+        // this.dataList.forEach((data) => {
+        //   data.class && isWordMatches(data.class, value);
+        //   // data.teachers && data.te
+        // });
+        for (const list of this.dataList) {
+          if (!list.class) {
+            continue;
+          }
+          if (this.isWordMatches(list.class, value)) {
+            newArray.push(list);
+          }
+        }
+      }
+      return this.dataList;
+    },
     clickMainHeader(index) {
       let existingIndex = this.selectedMainList.indexOf(index);
       if (existingIndex !== -1) {
@@ -293,11 +336,32 @@ export default {
       );
     },
   },
-  computed: {},
+  computed: {
+  
+  },
 };
 </script>
 
 <style scoped>
+.input-div {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  /* background: #f1f1f1; */
+}
+.input-div span {
+  position: absolute;
+  right: 3px;
+}
+.input-div input {
+  width: 100%;
+  padding: 10px;
+  font-size: 17px;
+  border: 1px 0px solid grey !important;
+  float: left;
+  background: #f1f1f1;
+}
 .submit-button {
   background-color: violet;
   color: white;
@@ -369,16 +433,16 @@ export default {
   top: -6px;
 }
 
-/* .select-box .options-container::-webkit-scrollbar {
+.active::-webkit-scrollbar {
   width: 8px;
   background: #0d141f;
-  border-radius: 0 8px 8px 0;
+  /* border-radius: 0 8px 8px 0; */
 }
 
-.select-box .options-container::-webkit-scrollbar-thumb {
+.active::-webkit-scrollbar-thumb {
   background: #525861;
-  border-radius: 0 8px 8px 0;
-} */
+  /* border-radius: 0 8px 8px 0; */
+}
 
 .select-box .option-primary,
 .option-main,
